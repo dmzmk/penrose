@@ -26,7 +26,7 @@ use std::{
 };
 use tracing::{debug, info};
 use x11::{
-    xft::{XftColor, XftColorAllocName, XftDrawCreate, XftDrawDestroy, XftDrawStringUtf8, XftDraw},
+    xft::{XftColor, XftColorAllocName, XftDraw, XftDrawCreate, XftDrawDestroy, XftDrawStringUtf8},
     xlib::{
         CapButt, Display, Drawable, False, JoinMiter, LineSolid, Window, XCopyArea, XCreateGC,
         XCreatePixmap, XDefaultColormap, XDefaultDepth, XDefaultVisual, XDrawRectangle,
@@ -353,7 +353,6 @@ impl<'a> Context<'a> {
         self.fill_rect(r, self.bg)
     }
 
-
     /// Render the provided text at the current context offset using the supplied color.
     pub fn draw_text(
         &mut self,
@@ -362,7 +361,7 @@ impl<'a> Context<'a> {
         padding: (u32, u32),
         c: Color,
     ) -> Result<(u32, u32)> {
-        struct DropMe{ 
+        struct DropMe {
             ptr: *mut XftDraw,
         }
 
@@ -378,7 +377,7 @@ impl<'a> Context<'a> {
             let color_map = XDefaultColormap(self.dpy, SCREEN);
             XftDrawCreate(self.dpy, self.s.drawable, visual, color_map)
         };
-        let _drop_me = DropMe{ ptr: d };
+        let _drop_me = DropMe { ptr: d };
 
         let (lpad, rpad) = (padding.0 as i32, padding.1);
         let (mut x, y) = (lpad + self.dx, self.dy);
